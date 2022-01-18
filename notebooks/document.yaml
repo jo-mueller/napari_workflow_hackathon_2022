@@ -1,0 +1,9 @@
+!!python/object:napari_workflows._workflow.Workflow
+_tasks:
+  blurred: !!python/tuple
+  - !!python/name:pyclesperanto_prototype.gaussian_blur ''
+  - input
+  - null
+  - 10
+  - 10
+  - 0

@@ -29,19 +29,23 @@ class WorkflowDispatcher(QWidget):
         self.viewer = napari_viewer
 
         btn_load_workflow = QPushButton("Load workflow")
-        btn_find_files = QPushButton("Load workflow")
-        btn_load_workflow.clicked.connect(self._load_workflow)
-        btn_find_files.clicked.connect(self._select_data)
+        btn_find_files = QPushButton("Detect files")
+        btn_run_workflow = QPushButton("Run workflow")
 
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(btn_load_workflow)
         self.layout().addWidget(btn_find_files)
+        self.layout().addWidget(btn_run_workflow)
+
+        btn_load_workflow.clicked.connect(self._load_workflow)
+        btn_find_files.clicked.connect(self._select_data)
 
     def _select_data(self):
-        dirname = QtWidgets.QFileDialog.getExistingDirectory()
-        import glob
-        for f in glob.glob('/Users/fernandesm/Downloads/Wormhole P92eZ/211229/P2/CS1/*.tif', recursive=True):
-            print(f)
+        self.dirname = QtWidgets.QFileDialog.getExistingDirectory()
+        self.filenames = []
+
+        for f in glob.glob(self.dirname + '*.tif', recursive=True):
+            self.filenames.append(f)
 
     def _load_workflow(self):
 
@@ -49,9 +53,9 @@ class WorkflowDispatcher(QWidget):
         with open(filename, "rb") as p:
             self.workflow = pickle.load(p)
 
-    def _run_workflow(self, list_of_images: list):
+    def _run_workflow(self):
 
-        for img in list_of_images:
+        for img in self.filenames:
 
             #image = io.imread(img)
             data, _ = read_data_with_plugins(img)

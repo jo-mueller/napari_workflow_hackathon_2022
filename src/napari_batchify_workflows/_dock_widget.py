@@ -37,10 +37,11 @@ class WorkflowDispatcher(QWidget):
         self.layout().addWidget(btn_find_files)
 
     def _select_data(self):
-        dirname = QtWidgets.QFileDialog.getExistingDirectory()
-        import glob
-        for f in glob.glob('/Users/fernandesm/Downloads/Wormhole P92eZ/211229/P2/CS1/*.tif', recursive=True):
-            print(f)
+        self.dirname = QtWidgets.QFileDialog.getExistingDirectory()
+        self.filenames = []
+
+        for f in glob.glob(self.dirname + '*.tif', recursive=True):
+            self.filenames.append(f)
 
     def _load_workflow(self):
 
@@ -48,9 +49,9 @@ class WorkflowDispatcher(QWidget):
         with open(filename, "rb") as p:
             self.workflow = pickle.load(p)
 
-    def _run_workflow(self, list_of_images: list):
+    def _run_workflow(self):
 
-        for img in list_of_images:
+        for img in self.filenames:
 
             image = io.imread(img)
             directory = os.path.dirname(image)

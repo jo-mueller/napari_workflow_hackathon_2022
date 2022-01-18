@@ -38,34 +38,41 @@ class WorkflowDispatcher(QWidget):
 
         btn_load_workflow.clicked.connect(self._load_workflow)
         btn_find_files.clicked.connect(self._select_data)
+        btn_run_workflow.clicked.connect(self._run_workflow)
 
     def _select_data(self):
         self.dirname = QtWidgets.QFileDialog.getExistingDirectory()
         self.filenames = []
 
-        for f in glob.glob(self.dirname + '*.tif', recursive=True):
+        for f in glob.glob(os.path.join(self.dirname, '**/*.tif'), recursive=True):
             self.filenames.append(f)
+
+            print('Detected ', f)
 
     def _load_workflow(self):
 
         filename, _ = QtWidgets.QFileDialog.getOpenFileName()
         with open(filename, "rb") as p:
             self.workflow = pickle.load(p)
+            print('Loaded: ', self.workflow)
 
     def _run_workflow(self):
 
         for img in self.filenames:
 
-            image = io.imread(img)
-            directory = os.path.dirname(image)
+            directory = os.path.dirname(img)
+            print('processing ', img)
 
             outfile = os.path.join(directory,
-                                   os.path.basename(image).split('.')[0] + 'processed.tif')
+                                   os.path.basename(img).split('.')[0] + '_processed.tif')
+            print(outfile)
 
-            self.workflow.set("Input", image)
-            result = self.workflow.get("labeled")
+            image = io.imread(img)
+            print(image)
+            self.workflow.set("input", image)
+            result = self.workflow.get("blurred")
 
-            io.imwrite(result)
+            io.imsave(outfile, result)
 
 @napari_hook_implementation
 def napari_experimental_provide_dock_widget():

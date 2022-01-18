@@ -7,6 +7,7 @@ see: https://napari.org/docs/dev/plugins/hook_specifications.html
 Replace code below according to your needs.
 """
 from napari_plugin_engine import napari_hook_implementation
+from napari.plugins.io import read_data_with_plugins
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QPushButton
 from magicgui import magic_factory
 
@@ -60,8 +61,10 @@ class WorkflowDispatcher(QWidget):
 
         for img in self.filenames:
 
-            directory = os.path.dirname(img)
-            print('processing ', img)
+            #image = io.imread(img)
+            data, _ = read_data_with_plugins(img)
+            image = data[0][0]
+            directory = os.path.dirname(image)
 
             outfile = os.path.join(directory,
                                    os.path.basename(img).split('.')[0] + '_processed.tif')

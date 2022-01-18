@@ -28,13 +28,16 @@ class WorkflowDispatcher(QWidget):
         self.viewer = napari_viewer
 
         btn_load_workflow = QPushButton("Load workflow")
-        btn_find_files = QPushButton("Load workflow")
-        btn_load_workflow.clicked.connect(self._load_workflow)
-        btn_find_files.clicked.connect(self._select_data)
+        btn_find_files = QPushButton("Detect files")
+        btn_run_workflow = QPushButton("Run workflow")
 
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(btn_load_workflow)
         self.layout().addWidget(btn_find_files)
+        self.layout().addWidget(btn_run_workflow)
+
+        btn_load_workflow.clicked.connect(self._load_workflow)
+        btn_find_files.clicked.connect(self._select_data)
 
     def _select_data(self):
         self.dirname = QtWidgets.QFileDialog.getExistingDirectory()

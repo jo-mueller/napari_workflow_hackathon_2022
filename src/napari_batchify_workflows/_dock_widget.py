@@ -64,8 +64,8 @@ class WorkflowDispatcher(QWidget):
             #image = io.imread(img)
             data, _ = read_data_with_plugins(img)
             image = data[0][0]
-            directory = os.path.dirname(image)
 
+            directory = os.path.dirname(img)
             outfile = os.path.join(directory,
                                    os.path.basename(img).split('.')[0] + '_processed.tif')
             print(outfile)

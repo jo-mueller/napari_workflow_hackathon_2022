@@ -1,0 +1,15 @@
+!!python/object:napari_workflows._workflow.Workflow
+_tasks:
+  binarized: !!python/tuple
+  - !!python/name:pyclesperanto_prototype.threshold_otsu ''
+  - deblurred
+  deblurred: !!python/tuple
+  - !!python/name:pyclesperanto_prototype.gaussian_blur ''
+  - input
+  - null
+  - 5
+  - 5
+  - 0
+  labeled: !!python/tuple
+  - !!python/name:pyclesperanto_prototype.connected_components_labeling_box ''
+  - binarized
